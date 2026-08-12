@@ -1,5 +1,7 @@
 # Deploy Ollama Server to the Cloud
 
+> **Railway trial expired?** Use **[DEPLOY-STEPS-FREE.md](../../DEPLOY-STEPS-FREE.md)** — easiest path is **local Ollama + ngrok/Cloudflare tunnel** ($0). Render steps below; free tier is 512 MB RAM (often too small for models).
+
 This folder runs a **remote Ollama API** so your [Streamlit chatbot](https://github.com/iman-coll/OllamaModel-of-Iman-For-Chatbot) on **Streamlit Community Cloud** can reach it.
 
 Streamlit Cloud **cannot** run `ollama serve` inside its container (no GPU, limited RAM, no persistent daemon). You deploy Ollama here instead, then point the Streamlit app at your public URL.

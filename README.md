@@ -2,7 +2,9 @@
 
 A Streamlit chatbot that uses [Ollama](https://ollama.com/) open-source models via LangChain for question answering.
 
-**Easiest deploy guide:** [DEPLOY-STEPS.md](DEPLOY-STEPS.md) — Railway + Streamlit for [@iman-coll](https://github.com/iman-coll).
+**Easiest deploy guide:** [DEPLOY-STEPS-FREE.md](DEPLOY-STEPS-FREE.md) — free options (local Ollama + tunnel, Render, etc.) for [@iman-coll](https://github.com/iman-coll).
+
+**Railway guide (if you have credits):** [DEPLOY-STEPS.md](DEPLOY-STEPS.md)
 
 ## Features
 
@@ -15,21 +17,19 @@ A Streamlit chatbot that uses [Ollama](https://ollama.com/) open-source models v
 
 ## Deploy to Streamlit Cloud (recommended path)
 
-Streamlit Cloud **cannot** run Ollama inside its container. Deploy Ollama separately, then connect the app.
+Streamlit Cloud **cannot** run Ollama inside its container. Deploy Ollama separately (or expose local Ollama), then connect the app.
 
-### Step 1 — Deploy Ollama to Railway (~5 min)
+**Start here if Railway trial expired:** **[DEPLOY-STEPS-FREE.md](DEPLOY-STEPS-FREE.md)** — local Ollama + ngrok/Cloudflare tunnel ($0, easiest), Render, Fly.io, Oracle Cloud.
 
-Follow the guide: **[deploy/ollama-server/README.md](deploy/ollama-server/README.md)**
+### Step 1 — Expose Ollama (pick one)
 
-Quick summary:
+| Path | Guide |
+|------|--------|
+| **Free — local PC + tunnel (recommended)** | [DEPLOY-STEPS-FREE.md § Option B](DEPLOY-STEPS-FREE.md#option-b--local-ollama--tunnel-recommended-0) |
+| Railway (needs credits) | [deploy/ollama-server/README.md](deploy/ollama-server/README.md) |
+| Render (512 MB free tier often too small) | [DEPLOY-STEPS-FREE.md § Option A](DEPLOY-STEPS-FREE.md#option-a--render-existing-renderyaml) |
 
-1. Sign up at [railway.app](https://railway.app/)
-2. **New Project → Deploy from GitHub** → select this repo
-3. Set **Root Directory** to `deploy/ollama-server`
-4. **Settings → Networking → Generate Domain** → copy the URL
-5. Wait for deploy logs to show `Model pull complete` (first run: 10–30 min)
-
-Test: open `https://YOUR-URL.up.railway.app/api/tags` in a browser.
+Copy your public Ollama URL (e.g. `https://iman-ollama.ngrok-free.app`). Test: `https://YOUR-URL/api/tags`.
 
 ### Step 2 — Deploy this Streamlit app
 
@@ -39,7 +39,7 @@ Test: open `https://YOUR-URL.up.railway.app/api/tags` in a browser.
 4. **App settings → Secrets** — paste:
 
 ```toml
-OLLAMA_BASE_URL = "https://YOUR-URL.up.railway.app"
+OLLAMA_BASE_URL = "https://YOUR-PUBLIC-OLLAMA-URL"
 ```
 
 5. Click **Deploy** (or **Reboot** if already deployed)
@@ -48,13 +48,13 @@ The sidebar should show **Ollama connected**. Start chatting!
 
 > See also [.streamlit/secrets.toml.example](.streamlit/secrets.toml.example) for a copy-paste template.
 
-### Alternative: Render
+### Free hosting after Railway expires
 
-Render free tier works but has cold starts. See [deploy/ollama-server/README.md](deploy/ollama-server/README.md#option-b-render-free-tier-slower-cold-starts).
+There is **no reliable free public Ollama API** run by a third party. Practical $0 paths:
 
-### Free public Ollama API?
-
-There is **no reliable free public Ollama endpoint** suitable for production demos. Community tunnels (ngrok, etc.) are temporary. **Self-hosted Railway Ollama** (Step 1 above) is the intended path and stays under free-tier credits for light use.
+- **Local Ollama + ngrok or Cloudflare Tunnel** — easiest if Ollama is already on your PC ([DEPLOY-STEPS-FREE.md](DEPLOY-STEPS-FREE.md))
+- **Render** — `render.yaml` included; free tier has cold starts and **512 MB RAM** (often too small for models)
+- **Oracle Cloud Always Free VM** — full cloud Ollama, more setup
 
 ---
 
@@ -108,7 +108,7 @@ The sidebar shows **Ollama connected** when the server is reachable.
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `OLLAMA_BASE_URL` | Yes (cloud) | Ollama API URL. Local default: `http://127.0.0.1:11434`. Cloud: your Railway URL. |
+| `OLLAMA_BASE_URL` | Yes (cloud) | Ollama API URL. Local default: `http://127.0.0.1:11434`. Cloud: tunnel or cloud deploy URL. |
 | `LANGCHAIN_API_KEY` | No | LangSmith API key for optional tracing |
 
 On Streamlit Cloud, `OLLAMA_BASE_URL` **must** be set in **App settings → Secrets** (not `.env`).
