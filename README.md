@@ -4,7 +4,7 @@ A Streamlit chatbot that uses [Ollama](https://ollama.com/) open-source models v
 
 ## Features
 
-- Choose from multiple Ollama models (phi3:mini, gemma:2b, Moondream, tinyllama)
+- Choose from multiple Ollama models (phi3:mini, gemma:2b, moondream, tinyllama)
 - Adjustable temperature and max tokens
 - Optional LangSmith tracing for debugging
 - Works locally **or** on [Streamlit Community Cloud](https://share.streamlit.io/) with a remote Ollama server

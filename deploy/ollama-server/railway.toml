@@ -7,3 +7,6 @@ healthcheckPath = "/api/tags"
 healthcheckTimeout = 600
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 5
+
+[env]
+OLLAMA_ORIGINS = "*"

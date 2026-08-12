@@ -245,7 +245,7 @@ with st.sidebar:
     st.header("Settings")
     model = st.selectbox(
         "Select Open Source Model",
-        ["phi3:mini", "gemma:2b", "Moondream", "tinyllama"],
+        ["phi3:mini", "gemma:2b", "moondream", "tinyllama"],
     )
     temperature = st.slider("Temperature", min_value=0.0, max_value=1.0, value=0.7)
     max_tokens = st.slider("Max Tokens", min_value=50, max_value=300, value=150)

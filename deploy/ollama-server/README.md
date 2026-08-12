@@ -4,7 +4,7 @@ This folder runs a **remote Ollama API** so your [Streamlit chatbot](https://git
 
 Streamlit Cloud **cannot** run `ollama serve` inside its container (no GPU, limited RAM, no persistent daemon). You deploy Ollama here instead, then point the Streamlit app at your public URL.
 
-**Models pulled on first start:** `phi3:mini`, `gemma:2b`, `moondream`, `tinyllama`
+**Models pulled on first start:** `phi3:mini` (default). Set env `OLLAMA_EXTRA_MODELS=gemma:2b,moondream,tinyllama` to pull more if your plan has enough RAM.
 
 ---
 
@@ -26,12 +26,12 @@ Railway is the easiest path: connect GitHub, set one folder, deploy.
    - **Watch Paths:** leave default or set to `deploy/ollama-server/**`
 4. Open **Settings → Networking** → **Generate Domain**.
 5. Copy your public URL, e.g. `https://iman-ollama-production.up.railway.app`  
-   (no trailing slash, no `:11434` — Railway proxies port 11434 for you).
+   (no trailing slash, no `:11434` — Railway proxies to the internal `PORT` for you).
 
 ### 3. Wait for models to download
 
 1. Open **Deployments** → latest deploy → **View Logs**.
-2. First boot pulls all four models — this can take **10–30 minutes** depending on network speed.
+2. First boot pulls `phi3:mini` by default — usually **5–15 minutes**. Add `OLLAMA_EXTRA_MODELS` in Railway variables to pull more models.
 3. When you see `Model pull complete. Ollama server is running.`, the server is ready.
 
 ### 4. Test the server
@@ -85,8 +85,8 @@ Render’s free tier **spins down after inactivity** (~15 min). First request af
 
 All four models need **~6+ GB RAM**. Railway/Render free tiers may be tight:
 
-- **Tip:** Edit `start.sh` and remove models you don’t need to save RAM.
-- If deploy fails with OOM, upgrade the plan or pull only `phi3:mini` first.
+- **Tip:** Default deploy pulls only `phi3:mini`. Add Railway env `OLLAMA_EXTRA_MODELS=gemma:2b,moondream,tinyllama` if you have **6+ GB RAM**.
+- If deploy fails with OOM, keep only `phi3:mini` (default) or upgrade the plan.
 
 ---
 
