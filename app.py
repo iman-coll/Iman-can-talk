@@ -262,6 +262,8 @@ with st.sidebar:
         st.caption("Environment: Streamlit Cloud")
     else:
         st.caption("Environment: Local")
+        if not ollama_ready and not cloud_config_error:
+            st.caption("Start the Ollama app first (or `ollama serve`).")
 
     if cloud_config_error in ("missing_secret", "localhost_on_cloud"):
         st.error("Remote Ollama not configured")
