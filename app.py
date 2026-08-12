@@ -75,16 +75,10 @@ def _resolve_ollama_url() -> tuple[str, str | None]:
 
 
 def _connection_hint(base_url: str, error: Exception) -> str:
-    if _is_streamlit_cloud():
-        err_text = str(error).lower()
-    if "10061" in err_text or "actively refused" in err_text:
-        return (
-            "Nothing is listening on port 11434 — Ollama is not running. "
-            "**Start the Ollama app first** (Windows tray) or run `ollama serve`, "
-            "then run `ollama pull phi3:mini` and refresh this page."
-        )
+    err_text = str(error).lower()
 
-    if _is_localhost_url(base_url):
+    if _is_streamlit_cloud():
+        if _is_localhost_url(base_url):
             return (
                 "On Streamlit Cloud, `localhost` and `127.0.0.1` point to the cloud "
                 "container — not your PC. Set `OLLAMA_BASE_URL` in **App settings → "
@@ -95,6 +89,13 @@ def _connection_hint(base_url: str, error: Exception) -> str:
             f"`OLLAMA_BASE_URL` is correct. Test with "
             f"`curl {base_url}/api/tags`. "
             f"Setup help: [deploy guide]({DEPLOY_GUIDE_URL})."
+        )
+
+    if "10061" in err_text or "actively refused" in err_text:
+        return (
+            "Nothing is listening on port 11434 — Ollama is not running. "
+            "**Start the Ollama app first** (Windows tray) or run `ollama serve`, "
+            "then run `ollama pull phi3:mini` and refresh this page."
         )
 
     errno = getattr(error, "errno", None)
