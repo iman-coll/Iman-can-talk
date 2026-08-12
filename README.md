@@ -19,17 +19,18 @@ A Streamlit chatbot that uses [Ollama](https://ollama.com/) open-source models v
 
 Streamlit Cloud **cannot** run Ollama inside its container. Deploy Ollama separately (or expose local Ollama), then connect the app.
 
-**Start here if Railway trial expired:** **[DEPLOY-STEPS-FREE.md](DEPLOY-STEPS-FREE.md)** — local Ollama + ngrok/Cloudflare tunnel ($0, easiest), Render, Fly.io, Oracle Cloud.
+**Start here if Railway trial expired:** **[DEPLOY-STEPS-FREE.md](DEPLOY-STEPS-FREE.md)** — **local Streamlit** ($0, 2 min) or **Cloudflare tunnel** for Streamlit Cloud. No ngrok payment needed.
 
 ### Step 1 — Expose Ollama (pick one)
 
 | Path | Guide |
 |------|--------|
-| **Free — local PC + tunnel (recommended)** | [DEPLOY-STEPS-FREE.md § Option B](DEPLOY-STEPS-FREE.md#option-b--local-ollama--tunnel-recommended-0) |
+| **Free — run locally (easiest, no tunnel)** | [DEPLOY-STEPS-FREE.md § Option 1](DEPLOY-STEPS-FREE.md#option-1--local-streamlit-simplest-100-free) |
+| **Free — Streamlit Cloud + Cloudflare tunnel** | [DEPLOY-STEPS-FREE.md § Option 2](DEPLOY-STEPS-FREE.md#option-2--cloudflare-quick-tunnel-free-for-streamlit-cloud) |
 | Railway (needs credits) | [deploy/ollama-server/README.md](deploy/ollama-server/README.md) |
 | Render (512 MB free tier often too small) | [DEPLOY-STEPS-FREE.md § Option A](DEPLOY-STEPS-FREE.md#option-a--render-existing-renderyaml) |
 
-Copy your public Ollama URL (e.g. `https://iman-ollama.ngrok-free.app`). Test: `https://YOUR-URL/api/tags`.
+Copy your public Ollama URL (e.g. `https://something.trycloudflare.com`). Test: `https://YOUR-URL/api/tags`.
 
 ### Step 2 — Deploy this Streamlit app
 
@@ -52,7 +53,8 @@ The sidebar should show **Ollama connected**. Start chatting!
 
 There is **no reliable free public Ollama API** run by a third party. Practical $0 paths:
 
-- **Local Ollama + ngrok or Cloudflare Tunnel** — easiest if Ollama is already on your PC ([DEPLOY-STEPS-FREE.md](DEPLOY-STEPS-FREE.md))
+- **Local Streamlit** — run on your PC, zero setup ([DEPLOY-STEPS-FREE.md](DEPLOY-STEPS-FREE.md))
+- **Local Ollama + Cloudflare Tunnel** — for share.streamlit.io ([DEPLOY-STEPS-FREE.md](DEPLOY-STEPS-FREE.md))
 - **Render** — `render.yaml` included; free tier has cold starts and **512 MB RAM** (often too small for models)
 - **Oracle Cloud Always Free VM** — full cloud Ollama, more setup
 
@@ -97,7 +99,7 @@ For development on your own machine:
 6. Run the app:
 
    ```bash
-   streamlit run app.py
+   py -3 -m streamlit run app.py
    ```
 
 The sidebar shows **Ollama connected** when the server is reachable.
