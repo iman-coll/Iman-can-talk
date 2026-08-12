@@ -14,7 +14,11 @@ load_dotenv()
 DEFAULT_OLLAMA_URL = "http://127.0.0.1:11434"
 DEPLOY_GUIDE_URL = (
     "https://github.com/iman-coll/OllamaModel-of-Iman-For-Chatbot"
-    "/blob/main/deploy/ollama-server/README.md"
+    "/blob/main/STREAMLIT-DEPLOY.md"
+)
+FREE_OLLAMA_GUIDE_URL = (
+    "https://github.com/iman-coll/OllamaModel-of-Iman-For-Chatbot"
+    "/blob/main/DEPLOY-STEPS-FREE.md"
 )
 
 
@@ -82,7 +86,8 @@ def _connection_hint(base_url: str, error: Exception) -> str:
             return (
                 "On Streamlit Cloud, `localhost` and `127.0.0.1` point to the cloud "
                 "container — not your PC. Set `OLLAMA_BASE_URL` in **App settings → "
-                f"Secrets** to your Railway Ollama URL. See the [deploy guide]({DEPLOY_GUIDE_URL})."
+                f"Secrets** to your public Ollama URL. See the [deploy guide]({DEPLOY_GUIDE_URL}) "
+                f"or [free Cloudflare tunnel]({FREE_OLLAMA_GUIDE_URL})."
             )
         return (
             f"Check that your remote Ollama server is running and that "
@@ -120,29 +125,28 @@ def _connection_hint(base_url: str, error: Exception) -> str:
 
 
 def _render_cloud_setup_ui(error_kind: str) -> None:
-    st.error("Deploy Ollama server first")
+    st.error("Ollama URL required in Streamlit secrets")
     if error_kind == "missing_secret":
         st.markdown(
-            """
+            f"""
 This app runs on **Streamlit Cloud**, which cannot run Ollama on your computer or inside
-its own container. You need a **remote Ollama server** (free on Railway).
+its own container. Add a **public Ollama URL** so the chatbot can reach your models.
 
-### Setup (~5 minutes)
+### Setup
 
-1. **[Deploy Ollama to Railway](https://github.com/iman-coll/OllamaModel-of-Iman-For-Chatbot/blob/main/deploy/ollama-server/README.md)**  
-   Follow the step-by-step guide in `deploy/ollama-server/README.md`.
+1. **Get a public Ollama URL** (free option: [Cloudflare tunnel]({FREE_OLLAMA_GUIDE_URL}))  
+   Example: `https://random-words.trycloudflare.com`
 
-2. **Copy your Railway public URL**  
-   Example: `https://your-app.up.railway.app`
-
-3. **Add Streamlit secrets** — open your app on [share.streamlit.io](https://share.streamlit.io),
+2. **Add Streamlit secrets** — open your app on [share.streamlit.io](https://share.streamlit.io),
    go to **App settings → Secrets**, and paste:
 
 ```toml
-OLLAMA_BASE_URL = "https://your-app.up.railway.app"
+OLLAMA_BASE_URL = "https://your-public-ollama-url"
 ```
 
-4. **Reboot the app** (Manage app → Reboot).
+3. **Reboot the app** (Manage app → Reboot).
+
+Full deploy steps: **[STREAMLIT-DEPLOY.md]({DEPLOY_GUIDE_URL})**
 
 The sidebar will show **Ollama connected** when everything is wired up.
             """
@@ -150,16 +154,17 @@ The sidebar will show **Ollama connected** when everything is wired up.
     else:
         st.markdown(
             f"""
-`OLLAMA_BASE_URL` in Streamlit secrets must be a **public cloud URL**, not `localhost`
+`OLLAMA_BASE_URL` in Streamlit secrets must be a **public URL**, not `localhost`
 or `127.0.0.1`.
 
-Replace it with your Railway URL, for example:
+Replace it with your tunnel or cloud URL, for example:
 
 ```toml
-OLLAMA_BASE_URL = "https://your-app.up.railway.app"
+OLLAMA_BASE_URL = "https://your-public-ollama-url"
 ```
 
-Full instructions: **[Ollama deploy guide]({DEPLOY_GUIDE_URL})**
+Deploy guide: **[STREAMLIT-DEPLOY.md]({DEPLOY_GUIDE_URL})** ·
+Free tunnel: **[DEPLOY-STEPS-FREE.md]({FREE_OLLAMA_GUIDE_URL})**
             """
         )
 

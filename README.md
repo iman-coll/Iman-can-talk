@@ -2,136 +2,113 @@
 
 A Streamlit chatbot that uses [Ollama](https://ollama.com/) open-source models via LangChain for question answering.
 
-**Easiest deploy guide:** [DEPLOY-STEPS-FREE.md](DEPLOY-STEPS-FREE.md) — free options (local Ollama + tunnel, Render, etc.) for [@iman-coll](https://github.com/iman-coll).
+| | Link |
+|---|---|
+| **GitHub** | [iman-coll/OllamaModel-of-Iman-For-Chatbot](https://github.com/iman-coll/OllamaModel-of-Iman-For-Chatbot) |
+| **Deploy (one-click)** | [Deploy on Streamlit Cloud](https://share.streamlit.io/deploy?repository=iman-coll/OllamaModel-of-Iman-For-Chatbot&branch=main&mainModule=app.py) |
+| **Main app file** | `app.py` |
 
-**Railway guide (if you have credits):** [DEPLOY-STEPS.md](DEPLOY-STEPS.md)
-
-## Features
-
-- Choose from multiple Ollama models (phi3:mini, gemma:2b, moondream, tinyllama)
-- Adjustable temperature and max tokens
-- Optional LangSmith tracing for debugging
-- Works locally **or** on [Streamlit Community Cloud](https://share.streamlit.io/) with a remote Ollama server
+**Author:** Iman Faisal · [@iman-coll](https://github.com/iman-coll)
 
 ---
 
-## Deploy to Streamlit Cloud (recommended path)
+## How it works
 
-Streamlit Cloud **cannot** run Ollama inside its container. Deploy Ollama separately (or expose local Ollama), then connect the app.
+- **GitHub** stores the code.
+- **Streamlit Cloud** hosts the chat UI at [share.streamlit.io](https://share.streamlit.io/).
+- **Ollama** runs the AI models. Streamlit Cloud cannot run Ollama inside its container, so you point the app at an Ollama server with the `OLLAMA_BASE_URL` secret.
 
-**Start here if Railway trial expired:** **[DEPLOY-STEPS-FREE.md](DEPLOY-STEPS-FREE.md)** — **local Streamlit** ($0, 2 min) or **Cloudflare tunnel** for Streamlit Cloud. No ngrok payment needed.
+---
 
-### Step 1 — Expose Ollama (pick one)
+## Deploy to Streamlit Cloud
 
-| Path | Guide |
-|------|--------|
-| **Free — run locally (easiest, no tunnel)** | [DEPLOY-STEPS-FREE.md § Option 1](DEPLOY-STEPS-FREE.md#option-1--local-streamlit-simplest-100-free) |
-| **Free — Streamlit Cloud + Cloudflare tunnel** | [DEPLOY-STEPS-FREE.md § Option 2](DEPLOY-STEPS-FREE.md#option-2--cloudflare-quick-tunnel-free-for-streamlit-cloud) |
-| Railway (needs credits) | [deploy/ollama-server/README.md](deploy/ollama-server/README.md) |
-| Render (512 MB free tier often too small) | [DEPLOY-STEPS-FREE.md § Option A](DEPLOY-STEPS-FREE.md#option-a--render-existing-renderyaml) |
+Full steps: **[STREAMLIT-DEPLOY.md](STREAMLIT-DEPLOY.md)**
 
-Copy your public Ollama URL (e.g. `https://something.trycloudflare.com`). Test: `https://YOUR-URL/api/tags`.
-
-### Step 2 — Deploy this Streamlit app
-
-1. Go to [share.streamlit.io](https://share.streamlit.io/) → sign in with GitHub
-2. **New app** → select **`iman-coll/OllamaModel-of-Iman-For-Chatbot`**
-3. **Main file path:** `app.py`
-4. **App settings → Secrets** — paste:
+1. Open the [one-click deploy link](https://share.streamlit.io/deploy?repository=iman-coll/OllamaModel-of-Iman-For-Chatbot&branch=main&mainModule=app.py) and sign in with GitHub (`iman-coll`).
+2. Confirm **Main file path:** `app.py` → click **Deploy**.
+3. Go to **App settings → Secrets** and add your Ollama URL:
 
 ```toml
-OLLAMA_BASE_URL = "https://YOUR-PUBLIC-OLLAMA-URL"
+OLLAMA_BASE_URL = "https://your-public-ollama-url"
 ```
 
-5. Click **Deploy** (or **Reboot** if already deployed)
+4. **Save** → **Manage app → Reboot**.
 
-The sidebar should show **Ollama connected**. Start chatting!
+See [.streamlit/secrets.toml.example](.streamlit/secrets.toml.example) for a copy-paste template.
 
-> See also [.streamlit/secrets.toml.example](.streamlit/secrets.toml.example) for a copy-paste template.
+### Free Ollama for Streamlit Cloud
 
-### Free hosting after Railway expires
-
-There is **no reliable free public Ollama API** run by a third party. Practical $0 paths:
-
-- **Local Streamlit** — run on your PC, zero setup ([DEPLOY-STEPS-FREE.md](DEPLOY-STEPS-FREE.md))
-- **Local Ollama + Cloudflare Tunnel** — for share.streamlit.io ([DEPLOY-STEPS-FREE.md](DEPLOY-STEPS-FREE.md))
-- **Render** — `render.yaml` included; free tier has cold starts and **512 MB RAM** (often too small for models)
-- **Oracle Cloud Always Free VM** — full cloud Ollama, more setup
+Use a **Cloudflare quick tunnel** to expose Ollama on your PC — no payment required.  
+Details: **[DEPLOY-STEPS-FREE.md](DEPLOY-STEPS-FREE.md)** (appendix).
 
 ---
 
-## Local Setup
+## Run locally
 
-For development on your own machine:
+For development on your own machine (no secrets needed):
 
-1. Install [Ollama](https://ollama.com/download):
-   - **Windows:** Download and run the installer. Ollama starts in the system tray.
-   - **macOS / Linux:** Install from ollama.com, then `ollama serve` if needed.
-
-2. Verify Ollama is running:
-
-   ```bash
-   ollama --version
-   curl http://127.0.0.1:11434/api/tags
-   ```
-
-3. Pull a model:
+1. Install [Ollama](https://ollama.com/download) and pull a model:
 
    ```bash
    ollama pull phi3:mini
    ```
 
-4. Install dependencies:
+2. Install dependencies and run:
 
    ```bash
    pip install -r requirements.txt
+   streamlit run app.py
    ```
 
-5. (Optional) Copy `.env.example` to `.env`:
+3. Optional: copy `.env.example` to `.env` to override `OLLAMA_BASE_URL` or enable LangSmith tracing.
 
-   ```
-   OLLAMA_BASE_URL=http://127.0.0.1:11434
-   LANGCHAIN_API_KEY=your_langsmith_api_key
-   ```
+The sidebar shows **Ollama connected** when the server is reachable at `http://127.0.0.1:11434`.
 
-   Use `127.0.0.1` instead of `localhost` to avoid IPv6 connection errors.
+Pull all chatbot models at once (Windows):
 
-6. Run the app:
-
-   ```bash
-   py -3 -m streamlit run app.py
-   ```
-
-The sidebar shows **Ollama connected** when the server is reachable.
+```powershell
+.\pull-all-models.ps1
+```
 
 ---
 
-## Environment Variables
+## Features
+
+- Choose from Ollama models: `phi3:mini`, `gemma:2b`, `moondream`, `tinyllama`
+- Adjustable temperature and max tokens
+- Optional LangSmith tracing
+- Works locally or on Streamlit Cloud with a remote Ollama URL
+
+---
+
+## Environment variables
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `OLLAMA_BASE_URL` | Yes (cloud) | Ollama API URL. Local default: `http://127.0.0.1:11434`. Cloud: tunnel or cloud deploy URL. |
+| `OLLAMA_BASE_URL` | Yes (cloud) | Public Ollama API URL. Local default: `http://127.0.0.1:11434` |
 | `LANGCHAIN_API_KEY` | No | LangSmith API key for optional tracing |
 
-On Streamlit Cloud, `OLLAMA_BASE_URL` **must** be set in **App settings → Secrets** (not `.env`).
+On Streamlit Cloud, set `OLLAMA_BASE_URL` in **App settings → Secrets** (not `.env`).
 
 ---
 
 ## Project structure
 
 ```
-app.py                          # Streamlit chatbot
-deploy/ollama-server/           # Docker + Railway/Render deploy for remote Ollama
-  ├── Dockerfile
-  ├── start.sh                  # Pulls phi3:mini, gemma:2b, moondream, tinyllama
-  ├── railway.toml
-  ├── render.yaml
-  └── README.md                 # Step-by-step Railway deploy
-.streamlit/secrets.toml.example # Template for Streamlit Cloud secrets
+app.py                              # Streamlit chatbot (Streamlit Cloud entry point)
+requirements.txt                    # Python dependencies
+.streamlit/
+  ├── config.toml                   # Streamlit theme and cloud settings
+  └── secrets.toml.example          # Template for Streamlit Cloud secrets
+STREAMLIT-DEPLOY.md                 # Deploy guide (GitHub → Streamlit Cloud)
+DEPLOY-STEPS-FREE.md                # Appendix: free Ollama (local + Cloudflare tunnel)
+docs/optional-railway/ollama-server/  # Optional paid cloud Ollama (Railway/Render) — not required
+pull-all-models.ps1                 # Pull all app models locally (Windows)
+iman_olama_models_use_for_reasoning.py  # Legacy alias — use app.py instead
 ```
 
 ---
 
-## Author
+## Optional: paid cloud Ollama
 
-**Iman Faisal** ([@iman-coll](https://github.com/iman-coll))
+If you prefer hosting Ollama on Railway or Render instead of a tunnel, see **[docs/optional-railway/README.md](docs/optional-railway/README.md)**. This is **not required** for the Streamlit app.
