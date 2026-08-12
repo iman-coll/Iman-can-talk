@@ -2,6 +2,8 @@
 
 A Streamlit chatbot that uses [Ollama](https://ollama.com/) open-source models via LangChain for question answering.
 
+**Easiest deploy guide:** [DEPLOY-STEPS.md](DEPLOY-STEPS.md) — Railway + Streamlit for [@iman-coll](https://github.com/iman-coll).
+
 ## Features
 
 - Choose from multiple Ollama models (phi3:mini, gemma:2b, moondream, tinyllama)

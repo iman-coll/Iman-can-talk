@@ -27,15 +27,12 @@ for i in $(seq 1 90); do
   sleep 2
 done
 
-# Default: phi3:mini only for Railway memory limits (~2.3 GB).
-# Set OLLAMA_EXTRA_MODELS=gemma:2b,moondream,tinyllama to pull additional models.
-MODELS=("phi3:mini")
-if [ -n "${OLLAMA_EXTRA_MODELS:-}" ]; then
-  IFS=',' read -ra EXTRA <<< "${OLLAMA_EXTRA_MODELS}"
-  for m in "${EXTRA[@]}"; do
-    trimmed="$(echo "${m}" | xargs)"
-    [ -n "${trimmed}" ] && MODELS+=("${trimmed}")
-  done
+# All models used by the Streamlit app dropdown.
+# Set OLLAMA_MODELS=phi3:mini to pull fewer models on low-memory plans.
+if [ -n "${OLLAMA_MODELS:-}" ]; then
+  IFS=',' read -ra MODELS <<< "${OLLAMA_MODELS}"
+else
+  MODELS=("phi3:mini" "gemma:2b" "moondream" "tinyllama")
 fi
 
 for model in "${MODELS[@]}"; do

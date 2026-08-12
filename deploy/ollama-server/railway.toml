@@ -10,3 +10,5 @@ restartPolicyMaxRetries = 5
 
 [env]
 OLLAMA_ORIGINS = "*"
+# All four app models; first deploy may take 20–40 min. Use OLLAMA_MODELS=phi3:mini on small plans.
+OLLAMA_MODELS = "phi3:mini,gemma:2b,moondream,tinyllama"
