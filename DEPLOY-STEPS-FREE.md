@@ -7,6 +7,31 @@ Railway’s trial/credits are gone. This guide covers **zero-cost** ways to conn
 
 ---
 
+## START HERE — Free Forever (5 steps)
+
+**Best for you:** Local Ollama on your Windows PC + **ngrok** tunnel.  
+**Cost:** $0 forever · **Credit card:** not required · **Time:** ~15 minutes
+
+Your Streamlit app already runs free on [Streamlit Cloud](https://share.streamlit.io/). It just needs a **public HTTPS URL** to reach Ollama on your PC.
+
+| Step | What to do |
+|------|------------|
+| **1** | Confirm Ollama works: `curl http://127.0.0.1:11434/api/tags` |
+| **2** | Install ngrok: `winget install ngrok.ngrok` → sign up free at [dashboard.ngrok.com](https://dashboard.ngrok.com/) → `ngrok config add-authtoken YOUR_TOKEN` |
+| **3** | Claim one free static domain: Dashboard → **Cloud Edge → Domains → Create Domain** → e.g. `iman-ollama.ngrok-free.app` |
+| **4** | Start tunnel (leave terminal open): `ngrok http 11434 --url=iman-ollama.ngrok-free.app --host-header=localhost:11434` |
+| **5** | Streamlit **App settings → Secrets** → paste `OLLAMA_BASE_URL = "https://iman-ollama.ngrok-free.app"` → **Save → Reboot app** |
+
+**Keep running while others use the chatbot:** Ollama (system tray) + the ngrok terminal window + PC awake.
+
+**Quick test only?** Use Cloudflare quick tunnel (no signup, but URL changes every restart) — see [B2a](#b2a--quick-tunnel-5-minutes-url-changes-each-run) below.
+
+**Need 24/7 without your PC on?** See [Option E — Oracle Cloud](#option-e--oracle-cloud-always-free-vm) (free forever, but harder + credit card verification).
+
+Full details, alternatives, and troubleshooting are below.
+
+---
+
 ## Which option should I pick?
 
 | Option | Cost | Credit card | Easiest? | Works for Ollama? |
