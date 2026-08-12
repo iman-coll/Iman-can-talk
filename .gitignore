@@ -1,0 +1,31 @@
+# Environment and secrets
+.env
+.env.*
+.streamlit/secrets.toml
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+imanenvofollamachatbot/
+venv/
+.venv/
+env/
+
+# IDE and tools
+.qodo/
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
