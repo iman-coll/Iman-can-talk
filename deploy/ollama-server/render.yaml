@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: iman-ollama-server
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/tags
+    envVars:
+      - key: OLLAMA_HOST
+        value: 0.0.0.0:11434
